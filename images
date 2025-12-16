@@ -1,5 +1,3 @@
-images/fidget-cone.png
-
-images/flexi-turtle.png
-
-images/coasters.png
+image: "images/flexi-turtle.png"
+image: "images/fidget-cone.png"
+image: "images/coasters.png"
