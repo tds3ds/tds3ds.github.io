@@ -13,139 +13,192 @@
     }
     *{ box-sizing:border-box; }
     body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: radial-gradient(1100px 700px at 15% 0%, #1b2550 0%, var(--bg) 45%, #070a14 100%);
       color:var(--text);
     }
     a{ color:inherit; text-decoration:none; }
     .wrap{ max-width:1100px; margin:0 auto; padding:28px 18px 72px; }
 
-    header{
-      display:flex; align-items:center; justify-content:space-between;
-      padding-bottom:18px;
-    }
-    .brand{ display:flex; align-items:center; gap:10px; font-weight:900; }
-    .dot{ width:12px; height:12px; border-radius:50%; background:var(--accent); }
-    nav a{ margin:0 6px; font-weight:700; color:var(--muted); }
+    header{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 0 18px; }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:.2px; }
+    .dot{ width:12px; height:12px; border-radius:50%; background:var(--accent); box-shadow:0 0 24px rgba(124,92,255,.7); }
+    nav{ display:flex; gap:10px; color:var(--muted); font-weight:800; }
+    nav a{ padding:8px 10px; border-radius:12px; }
+    nav a:hover{ background: rgba(255,255,255,.06); color:var(--text); }
 
     .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
       padding:12px 14px; border-radius:14px;
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      font-weight:900;
-      display:inline-block;
+      font-weight:950; background: rgba(255,255,255,.06);
     }
-    .btn.primary{ background:var(--accent); color:#0b1020; }
+    .btn.primary{ background:var(--accent); border-color: rgba(124,92,255,.95); color:#0b1020; }
 
     .hero{
       border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border-radius:20px;
+      box-shadow:0 18px 60px rgba(0,0,0,.35);
+      overflow:hidden;
       padding:22px;
       display:grid;
       grid-template-columns: 1.2fr .8fr;
       gap:18px;
+      align-items:stretch;
+    }
+    h1{ margin:0 0 10px; font-size:40px; line-height:1.08; }
+    p{ margin:0 0 14px; color:var(--muted); line-height:1.6; }
+    .pillrow{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .pill{
+      font-size:13px; font-weight:900;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid var(--line);
       background: rgba(0,0,0,.18);
     }
-    h1{ margin:0 0 10px; font-size:38px; }
-    p{ margin:0 0 14px; color:var(--muted); }
+    .card{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .sectionTitle{ margin:18px 0 8px; font-size:18px; }
 
     .grid{
-      margin-top:16px;
+      margin-top:14px;
       display:grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap:14px;
     }
     .product{
       border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18));
       border-radius:18px;
       overflow:hidden;
-      background: rgba(0,0,0,.22);
       display:flex;
       flex-direction:column;
+      box-shadow:0 14px 40px rgba(0,0,0,.25);
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
     }
+    .product:hover{
+      transform: translateY(-2px);
+      border-color: rgba(124,92,255,.45);
+      box-shadow:0 18px 60px rgba(0,0,0,.40);
+    }
+
     .img{
-      aspect-ratio:4/3;
-      overflow:hidden;
+      aspect-ratio: 4/3;
+      background: rgba(255,255,255,.06);
       border-bottom:1px solid var(--line);
+      position:relative;
+      overflow:hidden;
     }
     .img img{
       width:100%;
       height:100%;
-      object-fit:cover;
+      object-fit:cover;           /* looks “shop-like” */
       display:block;
+      transform: scale(1.03);
+      filter: contrast(1.06) saturate(1.03) brightness(1.03);
     }
-    .body{
-      padding:14px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .titleRow{
-      display:flex;
-      justify-content:space-between;
-      font-weight:900;
-    }
-    .meta span{
-      font-size:12px;
-      padding:5px 8px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      margin-right:6px;
-    }
-    footer{
-      margin-top:30px;
-      text-align:center;
-      font-size:13px;
-      color:var(--muted);
+    .tag{
+      position:absolute; top:10px; left:10px;
+      font-size:12px; font-weight:950;
+      padding:6px 9px; border-radius:999px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(6px);
     }
 
-    @media(max-width:900px){
+    .body{ padding:14px; display:flex; flex-direction:column; gap:10px; flex:1; }
+    .titleRow{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+    .title{ font-weight:1000; font-size:16px; margin:0; }
+    .price{ font-weight:1000; white-space:nowrap; }
+    .desc{ margin:0; color:var(--muted); font-size:14px; line-height:1.5; }
+    .meta{ display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:12px; }
+    .meta span{ padding:6px 8px; border-radius:999px; border:1px solid var(--line); background: rgba(0,0,0,.14); }
+    .actions{ display:flex; gap:10px; margin-top:auto; }
+    .actions .btn{ flex:1; padding:11px 12px; border-radius:14px; }
+
+    footer{ margin-top:26px; text-align:center; color:var(--muted); font-size:13px; line-height:1.6; }
+
+    @media (max-width: 940px){
       .hero{ grid-template-columns:1fr; }
       .grid{ grid-template-columns:1fr; }
+      h1{ font-size:34px; }
+      nav{ display:none; }
     }
   </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
+    <header>
+      <div class="brand"><span class="dot"></span> TDS3DS</div>
+      <nav>
+        <a href="#shop">Shop</a>
+        <a href="#custom">Custom</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn" href="mailto:tds3ds123@gmail.com?subject=TDS3DS%20Order%20Question">Email</a>
+    </header>
 
-<header>
-  <div class="brand"><span class="dot"></span> TDS3DS</div>
-  <nav>
-    <a href="#shop">Shop</a>
-    <a href="#custom">Custom</a>
-  </nav>
-  <a class="btn" href="mailto:tds3ds123@gmail.com">Email</a>
-</header>
+    <section class="hero">
+      <div>
+        <h1>PLA 3D prints + custom requests.</h1>
+        <p>
+          Everything listed is printed in <b>PLA</b>.
+          Want a custom material (PETG/ABS/TPU/Resin)? You can request it — <b>additional cost applies</b>.
+        </p>
+        <div class="pillrow">
+          <span class="pill">PLA prints</span>
+          <span class="pill">Custom colors</span>
+          <span class="pill">Custom materials (extra)</span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+          <a class="btn primary" href="#shop">Shop prints</a>
+          <a class="btn" href="#custom">Request a custom</a>
+        </div>
+      </div>
+      <div class="card">
+        <b style="display:block; font-size:16px; margin-bottom:6px;">How to buy</b>
+        <p style="margin:0;">
+          Message me by email with the item name, quantity, color, and delivery details.
+          I’ll reply with a payment link / invoice.
+        </p>
+      </div>
+    </section>
 
-<section class="hero">
-  <div>
-    <h1>PLA 3D prints + custom requests.</h1>
-    <p>
-      Everything listed is printed in <b>PLA</b>.
-      Custom materials (PETG / ABS / TPU / Resin) available at extra cost.
-    </p>
-    <a class="btn primary" href="#shop">Shop prints</a>
+    <h2 class="sectionTitle" id="shop">Shop</h2>
+    <div class="grid" id="grid"></div>
+
+    <h2 class="sectionTitle" id="custom">Custom Orders</h2>
+    <div class="card">
+      <p style="margin:0 0 10px;">
+        For a custom print, email me with:
+        <b>size</b>, <b>color</b>, <b>material</b> (PLA/PETG/ABS/TPU/resin), and a <b>link/STL</b> if you have one.
+      </p>
+      <a class="btn primary"
+         href="mailto:tds3ds123@gmail.com?subject=Custom%203D%20Print%20Request&body=Hi%20TDS3DS!%0A%0AWhat%20I%20want%3A%0ASize%3A%0AColor%3A%0AMaterial%3A%0ADeadline%3A%0ALink%20or%20STL%3A%0A%0AThanks!">
+        Email for a quote
+      </a>
+    </div>
+
+    <h2 class="sectionTitle" id="faq">FAQ</h2>
+    <div class="card">
+      <p style="margin:0 0 10px;">
+        <b>Materials?</b><br><span style="color:var(--muted);">All listed items are PLA. Custom materials are available with extra cost.</span>
+      </p>
+      <p style="margin:0;">
+        <b>Colors?</b><br><span style="color:var(--muted);">Tell me what color you want when ordering — I’ll confirm what’s available.</span>
+      </p>
+    </div>
+
+    <footer>
+      © <span id="year"></span> TDS3DS<br>
+      Some products are based on third-party designs and are sold with the designers’ permission.
+    </footer>
   </div>
-  <div>
-    <p><b>How to buy</b></p>
-    <p>Email me with item name, quantity, color, and postcode. I’ll reply with payment details.</p>
-  </div>
-</section>
-
-<h2 id="shop">Shop</h2>
-<div class="grid" id="grid"></div>
-
-<h2 id="custom">Custom Orders</h2>
-<p>Email me with size, color, material, and STL/link if you have one.</p>
-
-<footer>
-  © <span id="year"></span> TDS3DS<br>
-  Some products are based on third-party designs and sold with creator permission.
-</footer>
-
-</div>
 
 <script>
   const PRODUCTS = [
@@ -153,6 +206,7 @@
       id: "turtle",
       name: "Flexi Turtle (PLA)",
       price: 7.99,
+      tag: "Popular",
       desc: "Flexi articulated turtle. Pick your color when ordering.",
       material: "PLA",
       ship: "Made to order",
@@ -162,7 +216,8 @@
       id: "cone",
       name: "Fidget Cone (PLA)",
       price: 2.00,
-      desc: "Smooth twisting fidget cone. Great desk toy.",
+      tag: "Fidget",
+      desc: "Smooth twisty fidget cone. Great desk toy.",
       material: "PLA",
       ship: "Made to order",
       image: "images/fidget-cone.png"
@@ -171,7 +226,8 @@
       id: "coasters",
       name: "Drinks Coaster Set (6x) (PLA)",
       price: 9.99,
-      desc: "Set of 6 patterned coasters with holder.",
+      tag: "Set of 6",
+      desc: "6 patterned coasters + holder. Tell me which pattern(s) you want.",
       material: "PLA",
       ship: "Made to order",
       image: "images/coasters.png"
@@ -179,32 +235,44 @@
   ];
 
   document.getElementById("year").textContent = new Date().getFullYear();
+
   const grid = document.getElementById("grid");
+  const fmt = (n) => n.toFixed(2);
 
-  grid.innerHTML = PRODUCTS.map(p => `
-    <div class="product">
-      <div class="img">
-        <img src="${p.image}" alt="${p.name}">
-      </div>
-      <div class="body">
-        <div class="titleRow">
-          <span>${p.name}</span>
-          <span>£${p.price.toFixed(2)}</span>
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+  }
+
+  function card(p){
+    return `
+      <div class="product">
+        <div class="img">
+          ${p.tag ? `<span class="tag">${escapeHtml(p.tag)}</span>` : ""}
+          <img src="${p.image}" alt="${escapeHtml(p.name)}">
         </div>
-        <p>${p.desc}</p>
-        <div class="meta">
-          <span>${p.material}</span>
-          <span>${p.ship}</span>
+        <div class="body">
+          <div class="titleRow">
+            <p class="title">${escapeHtml(p.name)}</p>
+            <div class="price">£${fmt(p.price)}</div>
+          </div>
+          <p class="desc">${escapeHtml(p.desc)}</p>
+          <div class="meta">
+            <span>${escapeHtml(p.material)}</span>
+            <span>${escapeHtml(p.ship)}</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary"
+               href="mailto:tds3ds123@gmail.com?subject=Order%20-%20${encodeURIComponent(p.name)}&body=Hi%20TDS3DS!%0A%0AI%20want%20to%20order%3A%20${encodeURIComponent(p.name)}%0AQuantity%3A%0AColor%3A%0AShipping%20postcode%2Fcountry%3A%0A%0AThanks!">
+              Order
+            </a>
+            <a class="btn" href="mailto:tds3ds123@gmail.com?subject=Question%20-%20${encodeURIComponent(p.name)}">Question</a>
+          </div>
         </div>
-        <a class="btn primary"
-           href="mailto:tds3ds123@gmail.com?subject=Order%20${encodeURIComponent(p.name)}">
-           Order
-        </a>
       </div>
-    </div>
-  `).join("");
+    `;
+  }
+
+  grid.innerHTML = PRODUCTS.map(card).join("");
 </script>
-
 </body>
 </html>
-  
