@@ -8,12 +8,21 @@
 
   <style>
     :root{
-      --bg:#0b1020; --text:#eaf0ff; --muted:#a9b4d6; --accent:#7c5cff;
-      --line: rgba(255,255,255,.10);
+      --bg:#0b1020;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(0,0,0,.22);
+      --text:#eaf0ff;
+      --muted:#a9b4d6;
+      --accent:#7c5cff;
+      --line: rgba(255,255,255,.12);
+      --shadow: 0 18px 60px rgba(0,0,0,.40);
     }
+
     *{ box-sizing:border-box; }
+    html, body { height:100%; }
     body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: radial-gradient(1100px 700px at 15% 0%, #1b2550 0%, var(--bg) 45%, #070a14 100%);
       color:var(--text);
     }
@@ -31,20 +40,32 @@
     nav a:hover{ background: rgba(255,255,255,.06); color:var(--text); }
 
     .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      padding:12px 14px; border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      font-weight:950; background: rgba(255,255,255,.06);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      font-weight:950;
+      background: rgba(255,255,255,.06);
       cursor:pointer;
+      user-select:none;
+      position:relative;
+      z-index:5; /* make sure buttons always clickable */
     }
-    .btn.primary{ background:var(--accent); border-color: rgba(124,92,255,.95); color:#0b1020; }
+    .btn.primary{
+      background:var(--accent);
+      border-color: rgba(124,92,255,.95);
+      color:#0b1020;
+    }
     .btn:hover{ transform: translateY(-1px); }
 
     .hero{
       border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       border-radius:20px;
-      box-shadow:0 18px 60px rgba(0,0,0,.35);
+      box-shadow: var(--shadow);
       overflow:hidden;
       padding:22px;
       display:grid;
@@ -70,13 +91,16 @@
 
     .bar{
       margin-top:14px;
-      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+      display:flex; flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
     }
     input, select{
       width:100%;
       padding:12px 12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.16);
       background: rgba(0,0,0,.22);
       color: var(--text);
       outline:none;
@@ -90,9 +114,10 @@
       grid-template-columns: repeat(3, 1fr);
       gap:14px;
     }
+
     .product{
       border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18));
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.20));
       border-radius:18px;
       overflow:hidden;
       display:flex;
@@ -106,7 +131,7 @@
       box-shadow:0 18px 60px rgba(0,0,0,.40);
     }
 
-    /* Gallery */
+    /* --- Gallery --- */
     .imgWrap{
       border-bottom:1px solid var(--line);
       background: rgba(0,0,0,.22);
@@ -118,7 +143,7 @@
       border-radius:14px;
       overflow:hidden;
       position:relative;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
       cursor: zoom-in;
     }
@@ -127,27 +152,37 @@
       height:100%;
       object-fit: contain;
       display:block;
-      filter: contrast(1.06) saturate(1.03) brightness(1.03);
       background: rgba(0,0,0,.20);
+      filter: contrast(1.06) saturate(1.03) brightness(1.03);
+      pointer-events:none; /* so the click hits the container */
     }
+
+    /* BIG, visible badges */
+    .badge{
+      position:absolute; left:10px; top:10px;
+      font-size:13px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      padding:9px 12px;
+      border-radius:999px;
+      background: rgba(124,92,255,.92);
+      color:#0b1020;
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow: 0 10px 26px rgba(124,92,255,.35);
+      z-index:3;
+    }
+
     .zoomHint{
       position:absolute; right:10px; bottom:10px;
       font-size:12px; font-weight:950;
-      padding:6px 9px; border-radius:999px;
-      background: rgba(0,0,0,.55);
+      padding:7px 10px; border-radius:999px;
+      background: rgba(0,0,0,.62);
       border:1px solid rgba(255,255,255,.16);
-      backdrop-filter: blur(6px);
       color: var(--text);
       pointer-events:none;
+      z-index:3;
     }
-    .tag{
-      position:absolute; left:10px; top:10px;
-      font-size:12px; font-weight:950;
-      padding:6px 9px; border-radius:999px;
-      background: rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.16);
-      backdrop-filter: blur(6px);
-    }
+
     .thumbs{
       display:flex;
       gap:8px;
@@ -158,7 +193,7 @@
     .thumb{
       width:54px; height:54px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.16);
       background: rgba(255,255,255,.04);
       overflow:hidden;
       cursor:pointer;
@@ -166,24 +201,55 @@
       opacity:.82;
     }
     .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .thumb.active{ outline:2px solid rgba(124,92,255,.85); opacity:1; }
+    .thumb.active{ outline:3px solid rgba(124,92,255,.95); opacity:1; }
 
-    .body{ padding:14px; display:flex; flex-direction:column; gap:10px; flex:1; }
+    .body{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      flex:1;
+      position:relative;
+      z-index:2;
+    }
     .titleRow{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
     .title{ font-weight:1000; font-size:16px; margin:0; }
     .price{ font-weight:1000; white-space:nowrap; }
     .desc{ margin:0; color:var(--muted); font-size:14px; line-height:1.5; }
-    .meta{ display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:12px; }
-    .meta span{ padding:6px 8px; border-radius:999px; border:1px solid var(--line); background: rgba(0,0,0,.14); }
-    .actions{ display:flex; gap:10px; margin-top:auto; }
+
+    .meta{
+      display:flex; flex-wrap:wrap; gap:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .meta span{
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:auto;
+      position:relative;
+      z-index:10; /* ensures links are always above anything */
+    }
     .actions .btn{ flex:1; padding:11px 12px; border-radius:14px; }
 
-    footer{ margin-top:26px; text-align:center; color:var(--muted); font-size:13px; line-height:1.6; }
+    footer{
+      margin-top:26px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
 
-    /* Zoom modal */
+    /* --- Zoom modal --- */
     .modal{
       position:fixed; inset:0;
-      background: rgba(0,0,0,.72);
+      background: rgba(0,0,0,.75);
       display:none;
       align-items:center;
       justify-content:center;
@@ -195,8 +261,8 @@
       width:min(980px, 96vw);
       max-height: 90vh;
       border-radius:18px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(10,12,20,.78);
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(10,12,20,.86);
       box-shadow:0 30px 90px rgba(0,0,0,.55);
       overflow:hidden;
       display:flex;
@@ -214,7 +280,7 @@
     .iconBtn{
       padding:10px 12px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.16);
       background: rgba(255,255,255,.06);
       color:var(--text);
       cursor:pointer;
@@ -261,6 +327,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <header>
@@ -278,7 +345,7 @@
         <h1>PLA 3D prints + custom requests.</h1>
         <p>
           Everything listed is printed in <b>PLA</b>.
-          Want a custom material (PETG/ABS/TPU/Resin)? You can request it — <b>additional cost applies</b>.
+          Want a custom material (PETG/ABS/TPU)? You can request it — <b>additional costs apply</b>.
         </p>
         <div class="pillrow">
           <span class="pill">PLA prints</span>
@@ -293,7 +360,7 @@
       <div class="card">
         <b style="display:block; font-size:16px; margin-bottom:6px;">How to buy</b>
         <p style="margin:0;">
-          Message me by email with the item name, quantity, color, and delivery details.
+          Email me with the item name, quantity, color, and delivery details.
           I’ll reply with a payment link / invoice.
         </p>
       </div>
@@ -320,10 +387,11 @@
     <div class="card">
       <p style="margin:0 0 10px;">
         For a custom print, email me with:
-        <b>size</b>, <b>color</b>, <b>material</b> (PLA/PETG/ABS/TPU/resin), and a <b>link/STL</b> if you have one.
+        <b>size</b>, <b>color</b>, <b>material</b> (PLA/PETG/ABS/TPU), and a <b>link/STL</b> if you have one.
       </p>
+
       <a class="btn primary"
-         href="mailto:tds3ds123@gmail.com?subject=Custom%203D%20Print%20Request&body=Hi%20TDS3DS!%0A%0AWhat%20I%20want%3A%0ASize%3A%0AColor%3A%0AMaterial%3A%0ADeadline%3A%0ALink%20or%20STL%3A%0A%0AThanks!">
+         href="mailto:tds3ds123@gmail.com?subject=Custom%203D%20Print%20Request&body=Hi%20TDS3DS!%0A%0AWhat%20I%20want%3A%0ASize%3A%0AColor%3A%0AMaterial%20(PLA%2FPETG%2FABS%2FTPU)%3A%0ADeadline%3A%0ALink%20or%20STL%3A%0A%0AThanks!">
         Email for a quote
       </a>
     </div>
@@ -331,10 +399,12 @@
     <h2 class="sectionTitle" id="faq">FAQ</h2>
     <div class="card">
       <p style="margin:0 0 10px;">
-        <b>Materials?</b><br><span style="color:var(--muted);">All listed items are PLA. Custom materials are available with extra cost.</span>
+        <b>Materials?</b><br>
+        <span style="color:var(--muted);">All listed items are PLA. PETG/ABS/TPU available by request (extra cost).</span>
       </p>
       <p style="margin:0;">
-        <b>Colors?</b><br><span style="color:var(--muted);">Tell me what color you want when ordering — I’ll confirm what’s available.</span>
+        <b>Colors?</b><br>
+        <span style="color:var(--muted);">Tell me what color you want when ordering — I’ll confirm what’s available.</span>
       </p>
     </div>
 
@@ -350,15 +420,15 @@
       <div class="modalTop">
         <div class="modalTitle" id="modalTitle">Image</div>
         <div style="display:flex; gap:8px;">
-          <button class="iconBtn" id="closeBtn">Close</button>
+          <button class="iconBtn" id="closeBtn" type="button">Close</button>
         </div>
       </div>
       <div class="modalBody">
-        <button class="navBtn" id="prevBtn" aria-label="Previous image">‹</button>
+        <button class="navBtn" id="prevBtn" type="button" aria-label="Previous image">‹</button>
         <div class="modalImgWrap">
           <img id="modalImg" class="modalImg" alt="Zoomed product image" />
         </div>
-        <button class="navBtn" id="nextBtn" aria-label="Next image">›</button>
+        <button class="navBtn" id="nextBtn" type="button" aria-label="Next image">›</button>
       </div>
     </div>
   </div>
@@ -366,39 +436,33 @@
 <script>
   const EMAIL = "tds3ds123@gmail.com";
 
-  // ✅ Uses your exact filenames
+  // Uses your exact filenames in /images/
   const PRODUCTS = [
     {
       id: "turtle",
       name: "Flexi Turtle (PLA)",
       price: 7.99,
-      tag: "Popular",
+      badge: "POPULAR",
       desc: "Flexi articulated turtle. Pick your color when ordering.",
       material: "PLA",
       ship: "Made to order",
-      images: [
-        "images/turtle-1.png"
-      ]
+      images: ["images/turtle-1.png"]
     },
     {
       id: "cone",
       name: "Fidget Cone (PLA)",
       price: 2.00,
-      tag: "Fidget",
+      badge: "FIDGET",
       desc: "Smooth twisty fidget cone. Great desk toy.",
       material: "PLA",
       ship: "Made to order",
-      images: [
-        "images/cone-1.jpg",
-        "images/cone-2.jpg",
-        "images/cone-3.jpg"
-      ]
+      images: ["images/cone-1.jpg","images/cone-2.jpg","images/cone-3.jpg"]
     },
     {
       id: "coasters",
       name: "Drinks Coaster Set (6x) (PLA)",
       price: 9.99,
-      tag: "Set of 6",
+      badge: "SET OF 6",
       desc: "6 patterned coasters + holder. Tell me which pattern(s) you want.",
       material: "PLA",
       ship: "Made to order",
@@ -428,8 +492,9 @@
   function getFilteredSorted(){
     const term = (q.value || "").trim().toLowerCase();
     let list = PRODUCTS.filter(p =>
-      [p.name, p.desc, p.material, p.tag].some(x => (x||"").toLowerCase().includes(term))
+      [p.name, p.desc, p.material, p.badge].some(x => (x||"").toLowerCase().includes(term))
     );
+
     const s = sort.value;
     if(s === "name") list.sort((a,b)=>a.name.localeCompare(b.name));
     if(s === "price-asc") list.sort((a,b)=>a.price-b.price);
@@ -445,14 +510,24 @@
       </div>
     `).join("");
 
+    const orderHref =
+      `mailto:${EMAIL}?subject=${encodeURIComponent("Order - " + p.name)}&body=` +
+      encodeURIComponent(
+        `Hi TDS3DS!\n\nI want to order: ${p.name}\nQuantity:\nColor:\nShipping postcode/country:\n\nThanks!`
+      );
+
+    const questionHref =
+      `mailto:${EMAIL}?subject=${encodeURIComponent("Question - " + p.name)}`;
+
     return `
       <div class="product" data-product="${p.id}">
         <div class="imgWrap">
-          <div class="mainImg" data-src="${main}" data-index="0" title="Click to zoom">
-            ${p.tag ? `<span class="tag">${escapeHtml(p.tag)}</span>` : ""}
+          <div class="mainImg" data-index="0" title="Click to zoom">
+            ${p.badge ? `<span class="badge">${escapeHtml(p.badge)}</span>` : ""}
             <img src="${main}" alt="${escapeHtml(p.name)}">
             <span class="zoomHint">Click to zoom</span>
           </div>
+
           ${p.images && p.images.length > 1 ? `<div class="thumbs">${thumbs}</div>` : ``}
         </div>
 
@@ -461,20 +536,17 @@
             <p class="title">${escapeHtml(p.name)}</p>
             <div class="price">£${fmt(p.price)}</div>
           </div>
+
           <p class="desc">${escapeHtml(p.desc)}</p>
+
           <div class="meta">
             <span>${escapeHtml(p.material)}</span>
             <span>${escapeHtml(p.ship)}</span>
           </div>
+
           <div class="actions">
-            <a class="btn primary"
-               href="mailto:${EMAIL}?subject=Order%20-%20${encodeURIComponent(p.name)}&body=Hi%20TDS3DS!%0A%0AI%20want%20to%20order%3A%20${encodeURIComponent(p.name)}%0AQuantity%3A%0AColor%3A%0AShipping%20postcode%2Fcountry%3A%0A%0AThanks!">
-              Order
-            </a>
-            <a class="btn"
-               href="mailto:${EMAIL}?subject=Question%20-%20${encodeURIComponent(p.name)}">
-              Question
-            </a>
+            <a class="btn primary" href="${orderHref}">Order</a>
+            <a class="btn" href="${questionHref}">Question</a>
           </div>
         </div>
       </div>
@@ -498,12 +570,12 @@
       const thumbs = card.querySelectorAll(".thumb");
 
       thumbs.forEach(t => {
-        t.addEventListener("click", () => {
+        t.addEventListener("click", (ev) => {
+          ev.stopPropagation();
           const src = t.getAttribute("data-src");
           const idx = Number(t.getAttribute("data-i"));
           if(mainImg){
             mainImg.src = src;
-            mainWrap.setAttribute("data-src", src);
             mainWrap.setAttribute("data-index", String(idx));
           }
           thumbs.forEach(x => x.classList.remove("active"));
@@ -558,7 +630,7 @@
   function next(){
     if(!modalProduct) return;
     const n = modalProduct.images.length;
-    modalIndex = (modalIndex + 1) % n;
+    modalIndex = (modalIndex + n) % n;
     modalImg.src = modalProduct.images[modalIndex];
   }
 
@@ -577,7 +649,6 @@
     if(e.key === "ArrowRight") next();
   });
 
-  // search/sort
   q.addEventListener("input", render);
   sort.addEventListener("change", render);
   render();
