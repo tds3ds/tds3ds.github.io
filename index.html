@@ -1,657 +1,273 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TDS3DS • 3D Prints</title>
-  <meta name="description" content="TDS3DS — PLA 3D prints and custom orders." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TDS3DS – 3D Prints</title>
 
-  <style>
-    :root{
-      --bg:#0b1020;
-      --panel: rgba(255,255,255,.06);
-      --panel2: rgba(0,0,0,.22);
-      --text:#eaf0ff;
-      --muted:#a9b4d6;
-      --accent:#7c5cff;
-      --line: rgba(255,255,255,.12);
-      --shadow: 0 18px 60px rgba(0,0,0,.40);
-    }
+<style>
+:root{
+  --bg:#0b1020;
+  --panel:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.14);
+  --text:#eaf0ff;
+  --muted:#a9b4d6;
+  --accent:#7c5cff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,Segoe UI,Roboto,Arial;
+  background:radial-gradient(900px 600px at 15% 0%,#1b2550,var(--bg));
+  color:var(--text);
+}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1100px;margin:auto;padding:24px}
+header{display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:900;font-size:20px}
+nav a{margin-left:12px;color:var(--muted)}
+.btn{
+  padding:12px 16px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  font-weight:900;
+  cursor:pointer;
+}
+.btn.primary{background:var(--accent);color:#0b1020}
 
-    *{ box-sizing:border-box; }
-    html, body { height:100%; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1100px 700px at 15% 0%, #1b2550 0%, var(--bg) 45%, #070a14 100%);
-      color:var(--text);
-    }
-    a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:1100px; margin:0 auto; padding:28px 18px 72px; }
+.hero{
+  margin-top:18px;
+  padding:22px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:18px;
+}
+.hero h1{margin:0;font-size:38px}
+.card{border:1px solid var(--line);border-radius:18px;padding:16px;background:rgba(0,0,0,.25)}
 
-    header{
-      display:flex; align-items:center; justify-content:space-between; gap:14px;
-      padding:10px 0 18px;
-    }
-    .brand{ display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:.2px; }
-    .dot{ width:12px; height:12px; border-radius:50%; background:var(--accent); box-shadow:0 0 24px rgba(124,92,255,.7); }
-    nav{ display:flex; gap:10px; color:var(--muted); font-weight:800; }
-    nav a{ padding:8px 10px; border-radius:12px; }
-    nav a:hover{ background: rgba(255,255,255,.06); color:var(--text); }
+.grid{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
 
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.16);
-      font-weight:950;
-      background: rgba(255,255,255,.06);
-      cursor:pointer;
-      user-select:none;
-      position:relative;
-      z-index:5; /* make sure buttons always clickable */
-    }
-    .btn.primary{
-      background:var(--accent);
-      border-color: rgba(124,92,255,.95);
-      color:#0b1020;
-    }
-    .btn:hover{ transform: translateY(-1px); }
+.product{
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:rgba(0,0,0,.25);
+  display:flex;
+  flex-direction:column;
+}
 
-    .hero{
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      border-radius:20px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      padding:22px;
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:18px;
-      align-items:stretch;
-    }
-    h1{ margin:0 0 10px; font-size:40px; line-height:1.08; }
-    p{ margin:0 0 14px; color:var(--muted); line-height:1.6; }
-    .pillrow{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-    .pill{
-      font-size:13px; font-weight:900;
-      padding:7px 10px; border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-    }
-    .card{
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      border-radius:18px;
-      padding:16px;
-    }
+.mainImg{
+  position:relative;
+  aspect-ratio:4/3;
+  cursor:zoom-in;
+}
+.mainImg img{width:100%;height:100%;object-fit:contain}
+.badge{
+  position:absolute;top:10px;left:10px;
+  background:var(--accent);
+  color:#000;
+  font-weight:900;
+  padding:8px 12px;
+  border-radius:999px;
+}
+.zoomHint{
+  position:absolute;bottom:10px;right:10px;
+  background:rgba(0,0,0,.7);
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+}
+.thumbs{display:flex;gap:8px;padding:8px;overflow:auto}
+.thumb{
+  width:52px;height:52px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  cursor:pointer;
+}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb.active{outline:3px solid var(--accent)}
 
-    .bar{
-      margin-top:14px;
-      display:flex; flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    input, select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
-      outline:none;
-    }
+.body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.titleRow{display:flex;justify-content:space-between;font-weight:900}
+.actions{display:flex;gap:10px;margin-top:auto}
 
-    .sectionTitle{ margin:18px 0 8px; font-size:18px; }
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.8);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.modal.open{display:flex}
+.modalCard{
+  background:#0b1020;
+  border-radius:18px;
+  padding:16px;
+  max-width:900px;
+  width:95%;
+}
+.modal img{width:100%;max-height:80vh;object-fit:contain}
 
-    .grid{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-    }
-
-    .product{
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.20));
-      border-radius:18px;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      box-shadow:0 14px 40px rgba(0,0,0,.25);
-      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-    }
-    .product:hover{
-      transform: translateY(-2px);
-      border-color: rgba(124,92,255,.45);
-      box-shadow:0 18px 60px rgba(0,0,0,.40);
-    }
-
-    /* --- Gallery --- */
-    .imgWrap{
-      border-bottom:1px solid var(--line);
-      background: rgba(0,0,0,.22);
-      padding:10px;
-    }
-    .mainImg{
-      width:100%;
-      aspect-ratio: 4/3;
-      border-radius:14px;
-      overflow:hidden;
-      position:relative;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      cursor: zoom-in;
-    }
-    .mainImg img{
-      width:100%;
-      height:100%;
-      object-fit: contain;
-      display:block;
-      background: rgba(0,0,0,.20);
-      filter: contrast(1.06) saturate(1.03) brightness(1.03);
-      pointer-events:none; /* so the click hits the container */
-    }
-
-    /* BIG, visible badges */
-    .badge{
-      position:absolute; left:10px; top:10px;
-      font-size:13px;
-      font-weight:1000;
-      letter-spacing:.2px;
-      padding:9px 12px;
-      border-radius:999px;
-      background: rgba(124,92,255,.92);
-      color:#0b1020;
-      border:1px solid rgba(255,255,255,.15);
-      box-shadow: 0 10px 26px rgba(124,92,255,.35);
-      z-index:3;
-    }
-
-    .zoomHint{
-      position:absolute; right:10px; bottom:10px;
-      font-size:12px; font-weight:950;
-      padding:7px 10px; border-radius:999px;
-      background: rgba(0,0,0,.62);
-      border:1px solid rgba(255,255,255,.16);
-      color: var(--text);
-      pointer-events:none;
-      z-index:3;
-    }
-
-    .thumbs{
-      display:flex;
-      gap:8px;
-      margin-top:10px;
-      overflow:auto;
-      padding-bottom:2px;
-    }
-    .thumb{
-      width:54px; height:54px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.04);
-      overflow:hidden;
-      cursor:pointer;
-      flex: 0 0 auto;
-      opacity:.82;
-    }
-    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .thumb.active{ outline:3px solid rgba(124,92,255,.95); opacity:1; }
-
-    .body{
-      padding:14px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      flex:1;
-      position:relative;
-      z-index:2;
-    }
-    .titleRow{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
-    .title{ font-weight:1000; font-size:16px; margin:0; }
-    .price{ font-weight:1000; white-space:nowrap; }
-    .desc{ margin:0; color:var(--muted); font-size:14px; line-height:1.5; }
-
-    .meta{
-      display:flex; flex-wrap:wrap; gap:8px;
-      color:var(--muted);
-      font-size:12px;
-    }
-    .meta span{
-      padding:6px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.14);
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      margin-top:auto;
-      position:relative;
-      z-index:10; /* ensures links are always above anything */
-    }
-    .actions .btn{ flex:1; padding:11px 12px; border-radius:14px; }
-
-    footer{
-      margin-top:26px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.6;
-    }
-
-    /* --- Zoom modal --- */
-    .modal{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.75);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      z-index:9999;
-    }
-    .modal.open{ display:flex; }
-    .modalCard{
-      width:min(980px, 96vw);
-      max-height: 90vh;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(10,12,20,.86);
-      box-shadow:0 30px 90px rgba(0,0,0,.55);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-    .modalTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:10px 12px;
-      border-bottom:1px solid rgba(255,255,255,.12);
-    }
-    .modalTitle{ font-weight:950; color:var(--text); font-size:14px; }
-    .iconBtn{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color:var(--text);
-      cursor:pointer;
-      font-weight:950;
-    }
-    .modalBody{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:12px;
-      gap:10px;
-    }
-    .modalImgWrap{
-      width:100%;
-      border-radius:16px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.35);
-    }
-    .modalImg{
-      width:100%;
-      max-height: 76vh;
-      object-fit: contain;
-      display:block;
-    }
-    .navBtn{
-      width:44px;
-      height:44px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color:var(--text);
-      cursor:pointer;
-      font-weight:1000;
-      flex: 0 0 auto;
-    }
-
-    @media (max-width: 940px){
-      .hero{ grid-template-columns:1fr; }
-      .grid{ grid-template-columns:1fr; }
-      h1{ font-size:34px; }
-      nav{ display:none; }
-      .navBtn{ display:none; }
-    }
-  </style>
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand"><span class="dot"></span> TDS3DS</div>
-      <nav>
-        <a href="#shop">Shop</a>
-        <a href="#custom">Custom</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <a class="btn" href="mailto:tds3ds123@gmail.com?subject=TDS3DS%20Order%20Question">Email</a>
-    </header>
+<div class="wrap">
 
-    <section class="hero">
-      <div>
-        <h1>PLA 3D prints + custom requests.</h1>
-        <p>
-          Everything listed is printed in <b>PLA</b>.
-          Want a custom material (PETG/ABS/TPU)? You can request it — <b>additional costs apply</b>.
-        </p>
-        <div class="pillrow">
-          <span class="pill">PLA prints</span>
-          <span class="pill">Custom colors</span>
-          <span class="pill">Custom materials (extra)</span>
-        </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-          <a class="btn primary" href="#shop">Shop prints</a>
-          <a class="btn" href="#custom">Request a custom</a>
-        </div>
-      </div>
-      <div class="card">
-        <b style="display:block; font-size:16px; margin-bottom:6px;">How to buy</b>
-        <p style="margin:0;">
-          Email me with the item name, quantity, color, and delivery details.
-          I’ll reply with a payment link / invoice.
-        </p>
-      </div>
-    </section>
+<header>
+  <div class="brand">TDS3DS</div>
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#custom">Custom</a>
+  </nav>
+  <a class="btn" href="mailto:tds3ds123@gmail.com">Email</a>
+</header>
 
-    <div class="bar" id="shop">
-      <div style="flex:1 1 260px;">
-        <input id="q" placeholder="Search prints (turtle, coaster, fidget)..." />
-      </div>
-      <div style="min-width:200px;">
-        <select id="sort">
-          <option value="featured">Sort: Featured</option>
-          <option value="price-asc">Price: Low → High</option>
-          <option value="price-desc">Price: High → Low</option>
-          <option value="name">Name: A → Z</option>
-        </select>
-      </div>
-    </div>
-
-    <h2 class="sectionTitle">Shop</h2>
-    <div class="grid" id="grid"></div>
-
-    <h2 class="sectionTitle" id="custom">Custom Orders</h2>
-    <div class="card">
-      <p style="margin:0 0 10px;">
-        For a custom print, email me with:
-        <b>size</b>, <b>color</b>, <b>material</b> (PLA/PETG/ABS/TPU), and a <b>link/STL</b> if you have one.
-      </p>
-
-      <a class="btn primary"
-         href="mailto:tds3ds123@gmail.com?subject=Custom%203D%20Print%20Request&body=Hi%20TDS3DS!%0A%0AWhat%20I%20want%3A%0ASize%3A%0AColor%3A%0AMaterial%20(PLA%2FPETG%2FABS%2FTPU)%3A%0ADeadline%3A%0ALink%20or%20STL%3A%0A%0AThanks!">
-        Email for a quote
-      </a>
-    </div>
-
-    <h2 class="sectionTitle" id="faq">FAQ</h2>
-    <div class="card">
-      <p style="margin:0 0 10px;">
-        <b>Materials?</b><br>
-        <span style="color:var(--muted);">All listed items are PLA. PETG/ABS/TPU available by request (extra cost).</span>
-      </p>
-      <p style="margin:0;">
-        <b>Colors?</b><br>
-        <span style="color:var(--muted);">Tell me what color you want when ordering — I’ll confirm what’s available.</span>
-      </p>
-    </div>
-
-    <footer>
-      © <span id="year"></span> TDS3DS<br>
-      Some products are based on third-party designs and are sold with the designers’ permission.
-    </footer>
+<section class="hero">
+  <div>
+    <h1>PLA 3D prints + custom requests</h1>
+    <p>Everything listed is printed in PLA. PETG / ABS / TPU available on request (extra cost).</p>
+    <a class="btn primary" href="#shop">Shop prints</a>
   </div>
-
-  <!-- Zoom Modal -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modalCard" role="dialog" aria-modal="true">
-      <div class="modalTop">
-        <div class="modalTitle" id="modalTitle">Image</div>
-        <div style="display:flex; gap:8px;">
-          <button class="iconBtn" id="closeBtn" type="button">Close</button>
-        </div>
-      </div>
-      <div class="modalBody">
-        <button class="navBtn" id="prevBtn" type="button" aria-label="Previous image">‹</button>
-        <div class="modalImgWrap">
-          <img id="modalImg" class="modalImg" alt="Zoomed product image" />
-        </div>
-        <button class="navBtn" id="nextBtn" type="button" aria-label="Next image">›</button>
-      </div>
-    </div>
+  <div class="card">
+    <b>How to buy</b>
+    <p>Email me the item name, color, quantity and delivery details.</p>
   </div>
+</section>
+
+<h2 id="shop">Shop</h2>
+<div class="grid" id="grid"></div>
+
+<h2 id="custom">Custom Orders</h2>
+<div class="card">
+  <p>Email me with size, color, material (PLA / PETG / ABS / TPU) and a link/STL if you have one.</p>
+  <button class="btn primary" onclick="openQuote()">Email for a quote</button>
+</div>
+
+<footer style="margin-top:40px;color:var(--muted)">
+© <span id="year"></span> TDS3DS
+</footer>
+</div>
+
+<!-- IMAGE MODAL -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <div class="modalCard" onclick="event.stopPropagation()">
+    <img id="modalImg">
+  </div>
+</div>
+
+<!-- QUOTE MODAL -->
+<div class="modal" id="quote">
+  <div class="modalCard">
+    <h3>Custom Quote</h3>
+    <textarea id="quoteText" rows="8" style="width:100%"></textarea><br><br>
+    <button class="btn primary" onclick="copyQuote()">Copy message</button>
+    <button class="btn" onclick="closeQuote()">Close</button>
+  </div>
+</div>
 
 <script>
-  const EMAIL = "tds3ds123@gmail.com";
+document.getElementById("year").textContent=new Date().getFullYear();
 
-  // Uses your exact filenames in /images/
-  const PRODUCTS = [
-    {
-      id: "turtle",
-      name: "Flexi Turtle (PLA)",
-      price: 7.99,
-      badge: "POPULAR",
-      desc: "Flexi articulated turtle. Pick your color when ordering.",
-      material: "PLA",
-      ship: "Made to order",
-      images: ["images/turtle-1.png"]
-    },
-    {
-      id: "cone",
-      name: "Fidget Cone (PLA)",
-      price: 2.00,
-      badge: "FIDGET",
-      desc: "Smooth twisty fidget cone. Great desk toy.",
-      material: "PLA",
-      ship: "Made to order",
-      images: ["images/cone-1.jpg","images/cone-2.jpg","images/cone-3.jpg"]
-    },
-    {
-      id: "coasters",
-      name: "Drinks Coaster Set (6x) (PLA)",
-      price: 9.99,
-      badge: "SET OF 6",
-      desc: "6 patterned coasters + holder. Tell me which pattern(s) you want.",
-      material: "PLA",
-      ship: "Made to order",
-      images: [
-        "images/coasters-1.png",
-        "images/coasters-2.png",
-        "images/coasters-3.png",
-        "images/coasters-4.png",
-        "images/coasters-5.png",
-        "images/coasters-6.png",
-        "images/coasters-7.png"
-      ]
-    }
-  ];
+const PRODUCTS=[
+{
+ name:"Flexi Turtle (PLA)",price:7.99,badge:"POPULAR",
+ desc:"Flexi articulated turtle. Pick your color.",
+ images:["images/turtle-1.png"]
+},
+{
+ name:"Fidget Cone (PLA)",price:2.00,badge:"FIDGET",
+ desc:"Smooth twisty fidget cone.",
+ images:["images/cone-1.jpg","images/cone-2.jpg","images/cone-3.jpg"]
+},
+{
+ name:"Drinks Coaster Set (6x) (PLA)",price:9.99,badge:"SET OF 6",
+ desc:"6 patterned coasters + holder.",
+ images:[
+  "images/coasters-1.png","images/coasters-2.png","images/coasters-3.png",
+  "images/coasters-4.png","images/coasters-5.png","images/coasters-6.png","images/coasters-7.png"
+ ]
+}
+];
 
-  const fmt = (n) => n.toFixed(2);
-  document.getElementById("year").textContent = new Date().getFullYear();
+const grid=document.getElementById("grid");
 
-  const grid = document.getElementById("grid");
-  const q = document.getElementById("q");
-  const sort = document.getElementById("sort");
+function render(){
+ grid.innerHTML=PRODUCTS.map((p,i)=>`
+ <div class="product">
+  <div class="mainImg" onclick="zoom('${p.images[0]}')">
+   <span class="badge">${p.badge}</span>
+   <img src="${p.images[0]}">
+   <span class="zoomHint">Click to zoom</span>
+  </div>
+  <div class="thumbs">
+   ${p.images.map((img,j)=>`
+    <div class="thumb ${j==0?'active':''}" onclick="swap(this,'${img}')">
+     <img src="${img}">
+    </div>`).join("")}
+  </div>
+  <div class="body">
+   <div class="titleRow"><span>${p.name}</span><span>£${p.price.toFixed(2)}</span></div>
+   <p>${p.desc}</p>
+   <div class="actions">
+    <a class="btn primary" href="mailto:tds3ds123@gmail.com?subject=Order - ${p.name}">Order</a>
+    <a class="btn" href="mailto:tds3ds123@gmail.com?subject=Question - ${p.name}">Question</a>
+   </div>
+  </div>
+ </div>`).join("");
+}
+render();
 
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
-  }
+function swap(el,src){
+ const card=el.closest(".product");
+ card.querySelector(".mainImg img").src=src;
+ card.querySelectorAll(".thumb").forEach(t=>t.classList.remove("active"));
+ el.classList.add("active");
+}
 
-  function getFilteredSorted(){
-    const term = (q.value || "").trim().toLowerCase();
-    let list = PRODUCTS.filter(p =>
-      [p.name, p.desc, p.material, p.badge].some(x => (x||"").toLowerCase().includes(term))
-    );
+function zoom(src){
+ document.getElementById("modalImg").src=src;
+ document.getElementById("modal").classList.add("open");
+}
+function closeModal(){
+ document.getElementById("modal").classList.remove("open");
+}
 
-    const s = sort.value;
-    if(s === "name") list.sort((a,b)=>a.name.localeCompare(b.name));
-    if(s === "price-asc") list.sort((a,b)=>a.price-b.price);
-    if(s === "price-desc") list.sort((a,b)=>b.price-a.price);
-    return list;
-  }
+function openQuote(){
+ const text=
+`Hi TDS3DS!
 
-  function productCard(p){
-    const main = p.images?.[0] || "";
-    const thumbs = (p.images || []).map((src, i) => `
-      <div class="thumb ${i===0 ? "active" : ""}" data-src="${src}" data-i="${i}" title="View">
-        <img src="${src}" alt="${escapeHtml(p.name)} thumbnail ${i+1}">
-      </div>
-    `).join("");
+Custom print request:
+Size:
+Color:
+Material (PLA / PETG / ABS / TPU):
+Link/STL:
+Deadline:
 
-    const orderHref =
-      `mailto:${EMAIL}?subject=${encodeURIComponent("Order - " + p.name)}&body=` +
-      encodeURIComponent(
-        `Hi TDS3DS!\n\nI want to order: ${p.name}\nQuantity:\nColor:\nShipping postcode/country:\n\nThanks!`
-      );
-
-    const questionHref =
-      `mailto:${EMAIL}?subject=${encodeURIComponent("Question - " + p.name)}`;
-
-    return `
-      <div class="product" data-product="${p.id}">
-        <div class="imgWrap">
-          <div class="mainImg" data-index="0" title="Click to zoom">
-            ${p.badge ? `<span class="badge">${escapeHtml(p.badge)}</span>` : ""}
-            <img src="${main}" alt="${escapeHtml(p.name)}">
-            <span class="zoomHint">Click to zoom</span>
-          </div>
-
-          ${p.images && p.images.length > 1 ? `<div class="thumbs">${thumbs}</div>` : ``}
-        </div>
-
-        <div class="body">
-          <div class="titleRow">
-            <p class="title">${escapeHtml(p.name)}</p>
-            <div class="price">£${fmt(p.price)}</div>
-          </div>
-
-          <p class="desc">${escapeHtml(p.desc)}</p>
-
-          <div class="meta">
-            <span>${escapeHtml(p.material)}</span>
-            <span>${escapeHtml(p.ship)}</span>
-          </div>
-
-          <div class="actions">
-            <a class="btn primary" href="${orderHref}">Order</a>
-            <a class="btn" href="${questionHref}">Question</a>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function render(){
-    const list = getFilteredSorted();
-    grid.innerHTML = list.map(productCard).join("");
-    wireGalleries();
-  }
-
-  function wireGalleries(){
-    document.querySelectorAll(".product").forEach(card => {
-      const pid = card.getAttribute("data-product");
-      const product = PRODUCTS.find(p => p.id === pid);
-      if(!product) return;
-
-      const mainWrap = card.querySelector(".mainImg");
-      const mainImg = mainWrap?.querySelector("img");
-      const thumbs = card.querySelectorAll(".thumb");
-
-      thumbs.forEach(t => {
-        t.addEventListener("click", (ev) => {
-          ev.stopPropagation();
-          const src = t.getAttribute("data-src");
-          const idx = Number(t.getAttribute("data-i"));
-          if(mainImg){
-            mainImg.src = src;
-            mainWrap.setAttribute("data-index", String(idx));
-          }
-          thumbs.forEach(x => x.classList.remove("active"));
-          t.classList.add("active");
-        });
-      });
-
-      if(mainWrap){
-        mainWrap.addEventListener("click", () => {
-          const idx = Number(mainWrap.getAttribute("data-index") || "0");
-          openModal(product, idx);
-        });
-      }
-    });
-  }
-
-  // --- Modal (zoom) ---
-  const modal = document.getElementById("modal");
-  const modalImg = document.getElementById("modalImg");
-  const modalTitle = document.getElementById("modalTitle");
-  const closeBtn = document.getElementById("closeBtn");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-
-  let modalProduct = null;
-  let modalIndex = 0;
-
-  function openModal(product, index){
-    modalProduct = product;
-    modalIndex = Math.max(0, Math.min(index, (product.images?.length || 1) - 1));
-    modalTitle.textContent = product.name;
-    modalImg.src = product.images[modalIndex];
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
-  }
-
-  function closeModal(){
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden", "true");
-    modalImg.src = "";
-    modalProduct = null;
-    modalIndex = 0;
-  }
-
-  function prev(){
-    if(!modalProduct) return;
-    const n = modalProduct.images.length;
-    modalIndex = (modalIndex - 1 + n) % n;
-    modalImg.src = modalProduct.images[modalIndex];
-  }
-
-  function next(){
-    if(!modalProduct) return;
-    const n = modalProduct.images.length;
-    modalIndex = (modalIndex + n) % n;
-    modalImg.src = modalProduct.images[modalIndex];
-  }
-
-  closeBtn.addEventListener("click", closeModal);
-  prevBtn.addEventListener("click", prev);
-  nextBtn.addEventListener("click", next);
-
-  modal.addEventListener("click", (e) => {
-    if(e.target === modal) closeModal();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if(!modal.classList.contains("open")) return;
-    if(e.key === "Escape") closeModal();
-    if(e.key === "ArrowLeft") prev();
-    if(e.key === "ArrowRight") next();
-  });
-
-  q.addEventListener("input", render);
-  sort.addEventListener("change", render);
-  render();
+Thanks!`;
+ document.getElementById("quoteText").value=text;
+ document.getElementById("quote").classList.add("open");
+}
+function closeQuote(){
+ document.getElementById("quote").classList.remove("open");
+}
+function copyQuote(){
+ navigator.clipboard.writeText(document.getElementById("quoteText").value);
+ alert("Copied! Paste into an email to tds3ds123@gmail.com");
+}
 </script>
 </body>
 </html>
