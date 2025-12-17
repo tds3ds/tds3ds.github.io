@@ -4,56 +4,78 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TDS3DS – 3D Prints</title>
+<meta name="description" content="TDS3DS — PLA 3D prints and custom orders.">
 
 <style>
 :root{
   --bg:#0b1020;
   --panel:rgba(255,255,255,.06);
+  --panel2:rgba(0,0,0,.28);
   --line:rgba(255,255,255,.14);
   --text:#eaf0ff;
   --muted:#a9b4d6;
   --accent:#7c5cff;
+  --good:#31d07f;
 }
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
   font-family:system-ui,Segoe UI,Roboto,Arial;
-  background:radial-gradient(900px 600px at 15% 0%,#1b2550,var(--bg));
+  background:radial-gradient(900px 600px at 15% 0%,#1b2550 0%, var(--bg) 55%, #070a14 100%);
   color:var(--text);
 }
-a{text-decoration:none;color:inherit}
+a{color:inherit;text-decoration:none}
 .wrap{max-width:1100px;margin:auto;padding:24px}
-header{display:flex;justify-content:space-between;align-items:center}
-.brand{font-weight:900;font-size:20px}
-nav a{margin-left:12px;color:var(--muted)}
+
+header{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg, rgba(11,16,32,.95), rgba(11,16,32,.70));
+  backdrop-filter: blur(10px);
+  padding:14px 0;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:1000;font-size:18px}
+.dot{width:12px;height:12px;border-radius:999px;background:var(--accent);box-shadow:0 0 24px rgba(124,92,255,.6)}
+nav a{margin-left:10px;color:var(--muted);font-weight:900;padding:8px 10px;border-radius:12px}
+nav a:hover{background:rgba(255,255,255,.06);color:var(--text)}
+
 .btn{
-  padding:12px 16px;
-  border-radius:14px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 14px;border-radius:14px;
   border:1px solid var(--line);
   background:var(--panel);
-  font-weight:900;
+  font-weight:1000;
   cursor:pointer;
+  user-select:none;
 }
-.btn.primary{background:var(--accent);color:#0b1020}
+.btn.primary{background:var(--accent);color:#0b1020;border-color:rgba(124,92,255,.95)}
+.btn.ghost{background:transparent}
+.btn:active{transform:translateY(1px)}
+.btn.small{padding:10px 12px;border-radius:12px;font-size:13px}
 
 .hero{
-  margin-top:18px;
+  margin-top:10px;
   padding:22px;
   border-radius:20px;
   border:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.22));
   display:grid;
   grid-template-columns:1.2fr .8fr;
   gap:18px;
 }
-.hero h1{margin:0;font-size:38px}
-.card{border:1px solid var(--line);border-radius:18px;padding:16px;background:rgba(0,0,0,.25)}
-
-.grid{
-  margin-top:20px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+.hero h1{margin:0;font-size:38px;line-height:1.08}
+.hero p{margin:10px 0 0;color:var(--muted);line-height:1.6}
+.card{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(0,0,0,.25);
+  padding:16px;
 }
+
+.sectionTitle{margin:18px 0 10px;font-size:18px}
+
+.grid{margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 
 .product{
   border:1px solid var(--line);
@@ -62,64 +84,220 @@ nav a{margin-left:12px;color:var(--muted)}
   background:rgba(0,0,0,.25);
   display:flex;
   flex-direction:column;
+  box-shadow:0 16px 50px rgba(0,0,0,.25);
 }
-
+.imgWrap{padding:10px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.20)}
 .mainImg{
   position:relative;
+  width:100%;
   aspect-ratio:4/3;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
   cursor:zoom-in;
 }
-.mainImg img{width:100%;height:100%;object-fit:contain}
+.mainImg img{
+  width:100%;height:100%;
+  object-fit:contain;
+  display:block;
+  filter: contrast(1.05) saturate(1.03) brightness(1.03);
+  pointer-events:none;
+}
 .badge{
   position:absolute;top:10px;left:10px;
-  background:var(--accent);
-  color:#000;
-  font-weight:900;
-  padding:8px 12px;
-  border-radius:999px;
+  background:rgba(124,92,255,.92);
+  color:#0b1020;
+  font-weight:1000;
+  letter-spacing:.2px;
+  padding:9px 12px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 12px 28px rgba(124,92,255,.28);
+  z-index:2;
 }
 .zoomHint{
   position:absolute;bottom:10px;right:10px;
-  background:rgba(0,0,0,.7);
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
+  background:rgba(0,0,0,.62);
+  padding:7px 10px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  font-size:12px;font-weight:950;
+  z-index:2;
 }
-.thumbs{display:flex;gap:8px;padding:8px;overflow:auto}
+.thumbs{display:flex;gap:8px;margin-top:10px;overflow:auto;padding-bottom:2px}
 .thumb{
-  width:52px;height:52px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  cursor:pointer;
+  width:54px;height:54px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.04);
+  cursor:pointer;flex:0 0 auto;
+  overflow:hidden;opacity:.85;
 }
-.thumb img{width:100%;height:100%;object-fit:cover}
-.thumb.active{outline:3px solid var(--accent)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb.active{outline:3px solid rgba(124,92,255,.95);opacity:1}
 
-.body{padding:14px;display:flex;flex-direction:column;gap:10px}
-.titleRow{display:flex;justify-content:space-between;font-weight:900}
+.body{padding:14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.titleRow{display:flex;justify-content:space-between;gap:10px}
+.title{margin:0;font-weight:1000;font-size:16px}
+.price{font-weight:1000;white-space:nowrap}
+.desc{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+.meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+.meta span{padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.14)}
 .actions{display:flex;gap:10px;margin-top:auto}
+.actions .btn{flex:1}
 
+footer{margin-top:28px;color:var(--muted);text-align:center;font-size:13px;line-height:1.6}
+
+/* Zoom modal */
 .modal{
   position:fixed;inset:0;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,.78);
   display:none;
   align-items:center;
   justify-content:center;
+  padding:18px;
   z-index:9999;
 }
 .modal.open{display:flex}
 .modalCard{
-  background:#0b1020;
+  width:min(980px,96vw);
+  max-height:90vh;
   border-radius:18px;
-  padding:16px;
-  max-width:900px;
-  width:95%;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(10,12,20,.88);
+  overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
 }
-.modal img{width:100%;max-height:80vh;object-fit:contain}
+.modalTop{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12);
+}
+.modalTitle{font-weight:1000;font-size:14px}
+.modalBody{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px}
+.modalImgWrap{
+  width:100%;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.35);
+}
+.modalImg{width:100%;max-height:76vh;object-fit:contain;display:block}
+.navBtn{
+  width:44px;height:44px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  font-weight:1000;
+  cursor:pointer;
+}
 
-@media(max-width:900px){
+/* Cart Drawer */
+.drawerBack{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  z-index:9000;
+}
+.drawerBack.open{display:block}
+.drawer{
+  position:fixed;top:0;right:0;height:100%;width:min(420px,92vw);
+  background:rgba(10,12,20,.95);
+  border-left:1px solid rgba(255,255,255,.14);
+  box-shadow:-30px 0 90px rgba(0,0,0,.55);
+  transform:translateX(100%);
+  transition:transform .18s ease;
+  z-index:9001;
+  display:flex;
+  flex-direction:column;
+}
+.drawer.open{transform:translateX(0)}
+.drawerHead{
+  padding:14px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.drawerTitle{font-weight:1000}
+.drawerBody{padding:14px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.cartItem{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+  background:rgba(255,255,255,.04);
+  padding:10px;
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:10px;
+}
+.cartThumb{
+  width:64px;height:64px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.25);
+  overflow:hidden;
+}
+.cartThumb img{width:100%;height:100%;object-fit:cover}
+.cartName{font-weight:1000;margin:0;font-size:14px}
+.cartLine{color:var(--muted);font-size:12px;margin:2px 0 8px}
+.qtyRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.qtyPill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  padding:6px 8px;
+  background:rgba(0,0,0,.22);
+}
+.qtyBtn{
+  width:28px;height:28px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);font-weight:1000;
+  cursor:pointer;
+}
+.qtyNum{min-width:18px;text-align:center;font-weight:1000}
+.cartRight{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:8px;
+}
+.cartPrice{font-weight:1000}
+.smallLink{
+  background:transparent;border:none;color:var(--muted);
+  cursor:pointer;font-weight:950;padding:0;text-decoration:underline;
+}
+.drawerFoot{
+  padding:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+  display:flex;flex-direction:column;gap:10px;
+}
+.totalRow{display:flex;align-items:center;justify-content:space-between;font-weight:1000}
+.note{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+.field{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  outline:none;
+}
+textarea.field{resize:vertical;min-height:72px}
+.toast{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+  background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.14);
+  color:var(--text);
+  padding:10px 12px;border-radius:999px;
+  display:none;
+  z-index:99999;
+  font-weight:950;
+}
+.toast.show{display:block}
+
+@media(max-width:940px){
+  nav{display:none}
   .hero{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
+  .navBtn{display:none}
+  .hero h1{font-size:34px}
 }
 </style>
 </head>
@@ -128,146 +306,592 @@ nav a{margin-left:12px;color:var(--muted)}
 <div class="wrap">
 
 <header>
-  <div class="brand">TDS3DS</div>
+  <div class="brand"><span class="dot"></span> TDS3DS</div>
   <nav>
     <a href="#shop">Shop</a>
     <a href="#custom">Custom</a>
+    <a href="#faq">FAQ</a>
   </nav>
-  <a class="btn" href="mailto:tds3ds123@gmail.com">Email</a>
+
+  <div style="display:flex; gap:10px; align-items:center;">
+    <a class="btn" href="mailto:tds3ds123@gmail.com?subject=TDS3DS%20Order%20Question">Email</a>
+    <button class="btn primary" type="button" onclick="openCart()">
+      Cart <span id="cartCount" style="opacity:.9">(0)</span>
+    </button>
+  </div>
 </header>
 
 <section class="hero">
   <div>
-    <h1>PLA 3D prints + custom requests</h1>
-    <p>Everything listed is printed in PLA. PETG / ABS / TPU available on request (extra cost).</p>
-    <a class="btn primary" href="#shop">Shop prints</a>
+    <h1>PLA 3D prints + custom requests.</h1>
+    <p>
+      Everything listed is printed in <b>PLA</b>.
+      Want a custom material (PETG/ABS/TPU)? You can request it — <b>additional costs apply</b>.
+    </p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="btn primary" href="#shop">Shop prints</a>
+      <a class="btn" href="#custom">Request a custom</a>
+    </div>
   </div>
+
   <div class="card">
-    <b>How to buy</b>
-    <p>Email me the item name, color, quantity and delivery details.</p>
+    <b style="display:block; font-size:16px; margin-bottom:6px;">How to buy</b>
+    <p style="margin:0;">
+      Add items to cart → checkout → send me the order (email or copy/paste).
+      I’ll reply with a payment link / invoice.
+    </p>
   </div>
 </section>
 
-<h2 id="shop">Shop</h2>
+<h2 class="sectionTitle" id="shop">Shop</h2>
 <div class="grid" id="grid"></div>
 
-<h2 id="custom">Custom Orders</h2>
+<h2 class="sectionTitle" id="custom">Custom Orders</h2>
 <div class="card">
-  <p>Email me with size, color, material (PLA / PETG / ABS / TPU) and a link/STL if you have one.</p>
-  <button class="btn primary" onclick="openQuote()">Email for a quote</button>
+  <p style="margin:0 0 10px;">
+    For a custom print, email me with:
+    <b>size</b>, <b>color</b>, <b>material</b> (PLA/PETG/ABS/TPU), and a <b>link/STL</b> if you have one.
+  </p>
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <button class="btn primary" type="button" onclick="openQuote()">Email for a quote</button>
+    <a class="btn" href="mailto:tds3ds123@gmail.com?subject=Custom%203D%20Print%20Request">Mail app (backup)</a>
+  </div>
 </div>
 
-<footer style="margin-top:40px;color:var(--muted)">
-© <span id="year"></span> TDS3DS
+<h2 class="sectionTitle" id="faq">FAQ</h2>
+<div class="card">
+  <p style="margin:0 0 10px;">
+    <b>Materials?</b><br>
+    <span style="color:var(--muted);">Listed items are PLA. PETG/ABS/TPU available by request (extra cost).</span>
+  </p>
+  <p style="margin:0;">
+    <b>Colors?</b><br>
+    <span style="color:var(--muted);">Tell me what color you want when ordering — I’ll confirm what’s available.</span>
+  </p>
+</div>
+
+<footer>
+  © <span id="year"></span> TDS3DS<br>
+  Some products are based on third-party designs and are sold with the designers’ permission.
 </footer>
+
 </div>
 
-<!-- IMAGE MODAL -->
-<div class="modal" id="modal" onclick="closeModal()">
-  <div class="modalCard" onclick="event.stopPropagation()">
-    <img id="modalImg">
+<!-- Zoom Modal -->
+<div class="modal" id="zoomModal" aria-hidden="true">
+  <div class="modalCard" role="dialog" aria-modal="true">
+    <div class="modalTop">
+      <div class="modalTitle" id="zoomTitle">Image</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn small" type="button" onclick="closeZoom()">Close</button>
+      </div>
+    </div>
+    <div class="modalBody">
+      <button class="navBtn" id="zPrev" type="button" aria-label="Previous image">‹</button>
+      <div class="modalImgWrap">
+        <img id="zoomImg" class="modalImg" alt="Zoomed product image">
+      </div>
+      <button class="navBtn" id="zNext" type="button" aria-label="Next image">›</button>
+    </div>
   </div>
 </div>
 
-<!-- QUOTE MODAL -->
-<div class="modal" id="quote">
-  <div class="modalCard">
-    <h3>Custom Quote</h3>
-    <textarea id="quoteText" rows="8" style="width:100%"></textarea><br><br>
-    <button class="btn primary" onclick="copyQuote()">Copy message</button>
-    <button class="btn" onclick="closeQuote()">Close</button>
+<!-- Quote Modal -->
+<div class="modal" id="quoteModal" aria-hidden="true">
+  <div class="modalCard" role="dialog" aria-modal="true">
+    <div class="modalTop">
+      <div class="modalTitle">Custom Quote Request</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn small" type="button" onclick="closeQuote()">Close</button>
+      </div>
+    </div>
+
+    <div style="padding:14px; display:grid; gap:10px;">
+      <p style="margin:0; color:var(--muted);">
+        Fill this in, then click <b>Copy message</b> and paste it into an email to:
+        <b>tds3ds123@gmail.com</b>
+      </p>
+
+      <div style="display:grid; gap:8px;">
+        <input class="field" id="qSize" placeholder="Size (e.g., 10cm tall)">
+        <input class="field" id="qColor" placeholder="Color (e.g., black / blue / rainbow)">
+        <select class="field" id="qMat">
+          <option value="PLA">Material: PLA</option>
+          <option value="PETG">Material: PETG (extra)</option>
+          <option value="ABS">Material: ABS (extra)</option>
+          <option value="TPU">Material: TPU (extra)</option>
+        </select>
+        <input class="field" id="qLink" placeholder="Link to STL / model (optional)">
+        <input class="field" id="qDeadline" placeholder="Deadline (optional)">
+      </div>
+
+      <textarea class="field" id="qOut" rows="7"></textarea>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn primary" type="button" onclick="copyQuote()">Copy message</button>
+        <a class="btn" id="mailtoQuote" href="#" target="_self">Open mail app</a>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- Cart Drawer -->
+<div class="drawerBack" id="drawerBack" onclick="closeCart()"></div>
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawerHead">
+    <div class="drawerTitle">Your Cart</div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn small" type="button" onclick="closeCart()">Close</button>
+    </div>
+  </div>
+
+  <div class="drawerBody" id="cartItems"></div>
+
+  <div class="drawerFoot">
+    <div class="totalRow">
+      <span>Total</span>
+      <span id="cartTotal">£0.00</span>
+    </div>
+
+    <div class="note">
+      Checkout sends me your order. I’ll reply with a payment link / invoice.
+    </div>
+
+    <input class="field" id="custName" placeholder="Your name (optional)">
+    <input class="field" id="custEmail" placeholder="Your email (optional)">
+    <input class="field" id="custAddress" placeholder="Delivery town/postcode/country (required)">
+    <textarea class="field" id="custNotes" placeholder="Notes: colors, patterns, etc. (recommended)"></textarea>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn primary" type="button" onclick="checkout()">Checkout (email)</button>
+      <button class="btn" type="button" onclick="copyOrder()">Copy order</button>
+      <button class="btn ghost" type="button" onclick="clearCart()">Clear cart</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Added to cart</div>
 
 <script>
-document.getElementById("year").textContent=new Date().getFullYear();
+/* ---------- CONFIG ---------- */
+const EMAIL = "tds3ds123@gmail.com";
 
-const PRODUCTS=[
-{
- name:"Flexi Turtle (PLA)",price:7.99,badge:"POPULAR",
- desc:"Flexi articulated turtle. Pick your color.",
- images:["images/turtle-1.png"]
-},
-{
- name:"Fidget Cone (PLA)",price:2.00,badge:"FIDGET",
- desc:"Smooth twisty fidget cone.",
- images:["images/cone-1.jpg","images/cone-2.jpg","images/cone-3.jpg"]
-},
-{
- name:"Drinks Coaster Set (6x) (PLA)",price:9.99,badge:"SET OF 6",
- desc:"6 patterned coasters + holder.",
- images:[
-  "images/coasters-1.png","images/coasters-2.png","images/coasters-3.png",
-  "images/coasters-4.png","images/coasters-5.png","images/coasters-6.png","images/coasters-7.png"
- ]
-}
+const PRODUCTS = [
+  {
+    id: "turtle",
+    name: "Flexi Turtle (PLA)",
+    price: 7.99,
+    badge: "POPULAR",
+    desc: "Flexi articulated turtle. Pick your color when ordering.",
+    material: "PLA",
+    ship: "Made to order",
+    images: ["images/turtle-1.png"]
+  },
+  {
+    id: "cone",
+    name: "Fidget Cone (PLA)",
+    price: 2.00,
+    badge: "FIDGET",
+    desc: "Smooth twisty fidget cone. Great desk toy.",
+    material: "PLA",
+    ship: "Made to order",
+    images: ["images/cone-1.jpg","images/cone-2.jpg","images/cone-3.jpg"]
+  },
+  {
+    id: "coasters",
+    name: "Drinks Coaster Set (6x) (PLA)",
+    price: 9.99,
+    badge: "SET OF 6",
+    desc: "6 patterned coasters + holder. Tell me which pattern(s) you want.",
+    material: "PLA",
+    ship: "Made to order",
+    images: [
+      "images/coasters-1.png",
+      "images/coasters-2.png",
+      "images/coasters-3.png",
+      "images/coasters-4.png",
+      "images/coasters-5.png",
+      "images/coasters-6.png",
+      "images/coasters-7.png"
+    ]
+  }
 ];
 
-const grid=document.getElementById("grid");
+/* ---------- UTIL ---------- */
+const £ = (n)=>`£${Number(n).toFixed(2)}`;
+const byId = (id)=>document.getElementById(id);
 
-function render(){
- grid.innerHTML=PRODUCTS.map((p,i)=>`
- <div class="product">
-  <div class="mainImg" onclick="zoom('${p.images[0]}')">
-   <span class="badge">${p.badge}</span>
-   <img src="${p.images[0]}">
-   <span class="zoomHint">Click to zoom</span>
-  </div>
-  <div class="thumbs">
-   ${p.images.map((img,j)=>`
-    <div class="thumb ${j==0?'active':''}" onclick="swap(this,'${img}')">
-     <img src="${img}">
-    </div>`).join("")}
-  </div>
-  <div class="body">
-   <div class="titleRow"><span>${p.name}</span><span>£${p.price.toFixed(2)}</span></div>
-   <p>${p.desc}</p>
-   <div class="actions">
-    <a class="btn primary" href="mailto:tds3ds123@gmail.com?subject=Order - ${p.name}">Order</a>
-    <a class="btn" href="mailto:tds3ds123@gmail.com?subject=Question - ${p.name}">Question</a>
-   </div>
-  </div>
- </div>`).join("");
-}
-render();
-
-function swap(el,src){
- const card=el.closest(".product");
- card.querySelector(".mainImg img").src=src;
- card.querySelectorAll(".thumb").forEach(t=>t.classList.remove("active"));
- el.classList.add("active");
+function toast(msg){
+  const t = byId("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1200);
 }
 
-function zoom(src){
- document.getElementById("modalImg").src=src;
- document.getElementById("modal").classList.add("open");
-}
-function closeModal(){
- document.getElementById("modal").classList.remove("open");
+byId("year").textContent = new Date().getFullYear();
+
+/* ---------- RENDER PRODUCTS + GALLERY ---------- */
+const grid = byId("grid");
+
+function productCard(p){
+  const thumbs = (p.images || []).map((src,i)=>`
+    <div class="thumb ${i===0?'active':''}" data-src="${src}" data-i="${i}">
+      <img src="${src}" alt="">
+    </div>
+  `).join("");
+
+  return `
+    <div class="product" data-product="${p.id}">
+      <div class="imgWrap">
+        <div class="mainImg" data-index="0" title="Click to zoom">
+          <span class="badge">${p.badge}</span>
+          <img src="${p.images[0]}" alt="${p.name}">
+          <span class="zoomHint">Click to zoom</span>
+        </div>
+        ${p.images.length > 1 ? `<div class="thumbs">${thumbs}</div>` : ``}
+      </div>
+
+      <div class="body">
+        <div class="titleRow">
+          <p class="title">${p.name}</p>
+          <div class="price">${£(p.price)}</div>
+        </div>
+        <p class="desc">${p.desc}</p>
+
+        <div class="meta">
+          <span>${p.material}</span>
+          <span>${p.ship}</span>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" type="button" onclick="addToCart('${p.id}')">Add to cart</button>
+          <button class="btn" type="button" onclick="openCart();">Cart</button>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
+function renderProducts(){
+  grid.innerHTML = PRODUCTS.map(productCard).join("");
+  wireGalleries();
+}
+renderProducts();
+
+function wireGalleries(){
+  document.querySelectorAll(".product").forEach(card=>{
+    const pid = card.getAttribute("data-product");
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(!p) return;
+
+    const mainWrap = card.querySelector(".mainImg");
+    const mainImg = mainWrap.querySelector("img");
+    const thumbs = card.querySelectorAll(".thumb");
+
+    thumbs.forEach(t=>{
+      t.addEventListener("click",(ev)=>{
+        ev.stopPropagation();
+        const src = t.getAttribute("data-src");
+        const idx = t.getAttribute("data-i");
+        mainImg.src = src;
+        mainWrap.setAttribute("data-index", idx);
+        thumbs.forEach(x=>x.classList.remove("active"));
+        t.classList.add("active");
+      });
+    });
+
+    mainWrap.addEventListener("click", ()=>{
+      const idx = Number(mainWrap.getAttribute("data-index") || "0");
+      openZoom(p, idx);
+    });
+  });
+}
+
+/* ---------- ZOOM MODAL (with next/prev) ---------- */
+let zoomProduct = null;
+let zoomIndex = 0;
+
+function openZoom(p, idx){
+  zoomProduct = p;
+  zoomIndex = Math.max(0, Math.min(idx, p.images.length-1));
+  byId("zoomTitle").textContent = p.name;
+  byId("zoomImg").src = p.images[zoomIndex];
+  byId("zoomModal").classList.add("open");
+  byId("zoomModal").setAttribute("aria-hidden","false");
+}
+function closeZoom(){
+  byId("zoomModal").classList.remove("open");
+  byId("zoomModal").setAttribute("aria-hidden","true");
+  byId("zoomImg").src = "";
+  zoomProduct = null;
+  zoomIndex = 0;
+}
+function zPrev(){
+  if(!zoomProduct) return;
+  zoomIndex = (zoomIndex - 1 + zoomProduct.images.length) % zoomProduct.images.length;
+  byId("zoomImg").src = zoomProduct.images[zoomIndex];
+}
+function zNext(){
+  if(!zoomProduct) return;
+  zoomIndex = (zoomIndex + 1) % zoomProduct.images.length;
+  byId("zoomImg").src = zoomProduct.images[zoomIndex];
+}
+byId("zPrev").addEventListener("click", zPrev);
+byId("zNext").addEventListener("click", zNext);
+byId("zoomModal").addEventListener("click", (e)=>{ if(e.target.id==="zoomModal") closeZoom(); });
+document.addEventListener("keydown",(e)=>{
+  if(byId("zoomModal").classList.contains("open")){
+    if(e.key==="Escape") closeZoom();
+    if(e.key==="ArrowLeft") zPrev();
+    if(e.key==="ArrowRight") zNext();
+  }
+});
+
+/* ---------- CART (localStorage) ---------- */
+const CART_KEY = "tds3ds_cart_v1";
+
+function loadCart(){
+  try{ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
+  catch{ return {}; }
+}
+function saveCart(cart){
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateCartUI();
+}
+function cartCount(cart){
+  return Object.values(cart).reduce((a,b)=>a + (b.qty||0), 0);
+}
+function cartTotal(cart){
+  let total = 0;
+  for(const [pid, item] of Object.entries(cart)){
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(p) total += p.price * (item.qty||0);
+  }
+  return total;
+}
+function addToCart(pid){
+  const cart = loadCart();
+  if(!cart[pid]) cart[pid] = { qty: 0 };
+  cart[pid].qty += 1;
+  saveCart(cart);
+  toast("Added to cart");
+}
+function inc(pid){
+  const cart = loadCart();
+  if(cart[pid]){ cart[pid].qty += 1; saveCart(cart); }
+}
+function dec(pid){
+  const cart = loadCart();
+  if(cart[pid]){
+    cart[pid].qty -= 1;
+    if(cart[pid].qty <= 0) delete cart[pid];
+    saveCart(cart);
+  }
+}
+function removeItem(pid){
+  const cart = loadCart();
+  delete cart[pid];
+  saveCart(cart);
+}
+function clearCart(){
+  saveCart({});
+  toast("Cart cleared");
+}
+
+function openCart(){
+  byId("drawerBack").classList.add("open");
+  byId("drawer").classList.add("open");
+  byId("drawer").setAttribute("aria-hidden","false");
+}
+function closeCart(){
+  byId("drawerBack").classList.remove("open");
+  byId("drawer").classList.remove("open");
+  byId("drawer").setAttribute("aria-hidden","true");
+}
+
+function updateCartUI(){
+  const cart = loadCart();
+  byId("cartCount").textContent = `(${cartCount(cart)})`;
+  byId("cartTotal").textContent = £(cartTotal(cart));
+
+  const wrap = byId("cartItems");
+  const entries = Object.entries(cart);
+
+  if(entries.length === 0){
+    wrap.innerHTML = `
+      <div class="card" style="background:rgba(255,255,255,.04)">
+        <b>Your cart is empty</b>
+        <p style="margin:6px 0 0;color:var(--muted)">Add items from the shop.</p>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML = entries.map(([pid,item])=>{
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(!p) return "";
+    const qty = item.qty || 0;
+    return `
+      <div class="cartItem">
+        <div class="cartThumb"><img src="${p.images[0]}" alt=""></div>
+        <div>
+          <p class="cartName">${p.name}</p>
+          <div class="cartLine">${£(p.price)} each • ${p.material} • ${p.ship}</div>
+
+          <div class="qtyRow">
+            <div class="qtyPill">
+              <button class="qtyBtn" type="button" onclick="dec('${pid}')">−</button>
+              <div class="qtyNum">${qty}</div>
+              <button class="qtyBtn" type="button" onclick="inc('${pid}')">+</button>
+            </div>
+
+            <button class="smallLink" type="button" onclick="removeItem('${pid}')">Remove</button>
+          </div>
+
+          <div class="cartRight">
+            <span class="cartLine" style="margin:0">Line total</span>
+            <span class="cartPrice">${£(p.price * qty)}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+updateCartUI();
+
+/* ---------- CHECKOUT (mailto + copy) ---------- */
+function buildOrderText(){
+  const cart = loadCart();
+  const entries = Object.entries(cart);
+  if(entries.length === 0) return { ok:false, msg:"Your cart is empty." };
+
+  const name = byId("custName").value.trim();
+  const email = byId("custEmail").value.trim();
+  const address = byId("custAddress").value.trim();
+  const notes = byId("custNotes").value.trim();
+
+  if(!address) return { ok:false, msg:"Please add delivery town/postcode/country." };
+
+  let lines = [];
+  lines.push("Hi TDS3DS!");
+  lines.push("");
+  lines.push("Order request:");
+  lines.push("");
+
+  for(const [pid,item] of entries){
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(!p) continue;
+    lines.push(`- ${p.name} x${item.qty}  (${£(p.price)} each)`);
+  }
+
+  lines.push("");
+  lines.push(`Total: ${£(cartTotal(cart))}`);
+  lines.push("");
+  lines.push("Customer details:");
+  lines.push(`Name: ${name || "(not provided)"}`);
+  lines.push(`Email: ${email || "(not provided)"}`);
+  lines.push(`Delivery: ${address}`);
+  lines.push(`Notes (colors/patterns etc): ${notes || "(none)"}`);
+  lines.push("");
+  lines.push("Thanks!");
+
+  return { ok:true, text: lines.join("\n") };
+}
+
+function checkout(){
+  const built = buildOrderText();
+  if(!built.ok){ toast(built.msg); return; }
+
+  const subject = encodeURIComponent("TDS3DS Order");
+  const body = encodeURIComponent(built.text);
+
+  // mailto (if user has email app)
+  window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+}
+
+async function copyOrder(){
+  const built = buildOrderText();
+  if(!built.ok){ toast(built.msg); return; }
+  try{
+    await navigator.clipboard.writeText(built.text);
+    toast("Order copied");
+  }catch{
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = built.text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    toast("Order copied");
+  }
+}
+
+/* ---------- QUOTE MODAL ---------- */
 function openQuote(){
- const text=
+  byId("quoteModal").classList.add("open");
+  byId("quoteModal").setAttribute("aria-hidden","false");
+  buildQuote();
+}
+function closeQuote(){
+  byId("quoteModal").classList.remove("open");
+  byId("quoteModal").setAttribute("aria-hidden","true");
+}
+function buildQuote(){
+  const size = byId("qSize").value || "";
+  const color = byId("qColor").value || "";
+  const mat = byId("qMat").value || "PLA";
+  const link = byId("qLink").value || "";
+  const deadline = byId("qDeadline").value || "";
+
+  const msg =
 `Hi TDS3DS!
 
 Custom print request:
-Size:
-Color:
-Material (PLA / PETG / ABS / TPU):
-Link/STL:
-Deadline:
+Size: ${size}
+Color: ${color}
+Material: ${mat}
+Link/STL: ${link}
+Deadline: ${deadline}
+
+Shipping postcode/country:
+Any notes:
 
 Thanks!`;
- document.getElementById("quoteText").value=text;
- document.getElementById("quote").classList.add("open");
+
+  byId("qOut").value = msg;
+
+  const subject = encodeURIComponent("Custom 3D Print Request");
+  const body = encodeURIComponent(msg);
+  byId("mailtoQuote").href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 }
-function closeQuote(){
- document.getElementById("quote").classList.remove("open");
+async function copyQuote(){
+  buildQuote();
+  const text = byId("qOut").value;
+  try{
+    await navigator.clipboard.writeText(text);
+    toast("Quote copied");
+  }catch{
+    byId("qOut").select();
+    document.execCommand("copy");
+    toast("Quote copied");
+  }
 }
-function copyQuote(){
- navigator.clipboard.writeText(document.getElementById("quoteText").value);
- alert("Copied! Paste into an email to tds3ds123@gmail.com");
-}
+["qSize","qColor","qMat","qLink","qDeadline"].forEach(id=>{
+  document.addEventListener("input",(e)=>{ if(e.target && e.target.id===id) buildQuote(); });
+  document.addEventListener("change",(e)=>{ if(e.target && e.target.id===id) buildQuote(); });
+});
+byId("quoteModal").addEventListener("click",(e)=>{ if(e.target.id==="quoteModal") closeQuote(); });
+document.addEventListener("keydown",(e)=>{
+  if(byId("quoteModal").classList.contains("open") && e.key==="Escape") closeQuote();
+});
+
+/* ---------- Drawer ESC close ---------- */
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="Escape"){
+    if(byId("drawer").classList.contains("open")) closeCart();
+  }
+});
 </script>
 </body>
 </html>
